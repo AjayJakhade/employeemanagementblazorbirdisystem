@@ -1,0 +1,112 @@
+﻿@page "/EMS/RolePrivilege"
+@rendermode RenderMode.InteractiveServer
+@using EMS.Client.BuisnessLayer.Models
+@using Microsoft.AspNetCore.Components.QuickGrid;
+
+
+<div class="bg-lightblue p-3 mb-4">
+    <div class="row g-2">
+        <div class="col-md-9 col-6">
+            <h2>Role Privilege</h2>
+        </div>
+        @if (permission.canAdd)
+        {
+            <div class="col-md-3 col-6">
+                <button class="btn btn-sm btn-danger float-end" type="button" @onclick="@(()=>fnCallModal(new RolePrivilegeModel { isActive=true }, "Add RolePrivilege"))">
+                    <span class="material-icons fs-18px align-top">
+                        domain_add
+                    </span>
+                    Add RolePrivilege
+                </button>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 mb-2">
+           
+        </div>
+        <div class="col-12">
+            @if (permission.canGet)
+            {
+                <div class="card card-body border-primary p-2">
+                    @{
+                        int count = 1;
+                    }
+                    @if (objRolePrivilege == null)
+                    {
+                        @if (formMessage is not null && !string.IsNullOrWhiteSpace(formMessage.message))
+                        {
+                            <div class="alert alert-info @formMessage.cssClass">@formMessage.message</div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info"><em>@pageText</em></div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="table-responsive grid">
+                            <QuickGrid Items="objRolePrivilege.AsQueryable()" Class="table table-bordered table-striped table-hover" Pagination="@pagination">
+                                <TemplateColumn Title="SrNO" Sortable="false">
+                                    @count
+                                    @{
+                                        count++;
+                                    }
+                                </TemplateColumn>
+                              
+                                <PropertyColumn Property="@(p=>p.rolename)" Title="Role Name" Sortable="true"></PropertyColumn>
+                                <PropertyColumn Property="@(p=>p.privilegename)" Title="Privilege Name" Sortable="true"></PropertyColumn>
+                              
+                                <PropertyColumn Property="@(p=>p.canadd)" Title="CanAdd" Sortable="true"></PropertyColumn>
+                                <PropertyColumn Property="@(p=>p.canedit)" Title="CanEdit" Sortable="true"></PropertyColumn>
+                                <PropertyColumn Property="@(p=>p.candelete)" Title="CanDelete" Sortable="true"></PropertyColumn>
+                                <PropertyColumn Property="@(p=>p.canexport)" Title="CanExport" Sortable="true"></PropertyColumn>
+                                <PropertyColumn Property="@(p=>p.canget)" Title="CanGet" Sortable="true"></PropertyColumn>
+
+                                <TemplateColumn Title="Active">
+                                    @if (context.isActive)
+                                    {
+                                        <span class="material-symbols-outlined text-success">
+                                            check_circle
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="material-symbols-outlined text-danger">
+                                            cancel
+                                        </span>
+                                    }
+                                </TemplateColumn>
+                                @if (permission.canEdit)
+                                {
+                                    <TemplateColumn>
+                                        <a class="btn" @onclick="@(()=>fnCallModal(context, "Edit Role Privilege Details"))">
+                                            <span class="material-symbols-outlined">
+                                                edit
+                                            </span>
+                                        </a>
+                                    </TemplateColumn>
+                                }
+                                @if (permission.canDelete)
+                                {
+                                    <TemplateColumn>
+                                        <a class="btn" @onclick="@(()=>fndeletemodel(context, "Delete Role Privilege Details"))">
+                                            <span class="material-symbols-outlined">
+                                                delete
+                                            </span>
+                                        </a>
+                                    </TemplateColumn>
+                                }
+                            </QuickGrid>
+                        </div>
+                        <Paginator State="pagination" />
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<UpsertRolePrivilege @ref="UpsertRolePrivilege" onDoneButtonClicked="fnRolePrivilegeSearch"></UpsertRolePrivilege>

@@ -1,0 +1,106 @@
+﻿@page "/EMS/Salary"
+@rendermode RenderMode.InteractiveServer
+
+@using EMS.Client.BuisnessLayerShared.Models
+@using Microsoft.AspNetCore.Components.QuickGrid;
+
+<div class="bg-lightblue p-3 mb-4">
+    <div class="row g-2">
+        <div class="col-md-9 col-6">
+            <h2>Salary</h2>
+        </div>
+        @if (permission.canAdd)
+        {
+            <div class="col-md-3 col-6">
+                <button class="btn btn-sm btn-danger float-end" type="button" @onclick="@(()=>fnOpenSalary("Add Salary",new SalaryModel { isActive=true }))">
+                    <span class="material-icons fs-18px align-top">
+                        domain_add
+                    </span>
+                    Add Salary
+                </button>
+            </div>
+        }
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 mb-2">
+          
+        </div>
+        <div class="col-12">
+            @if (permission.canGet)
+            {
+                <div class="card card-body border-primary p-2">
+                    @{
+                        int count = 1;
+                    }
+                    @if (objsalary == null)
+                    {
+                        <div class="alert alert-info"><em>@pageText</em></div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive grid">
+                            <QuickGrid Items="objsalary.AsQueryable()" Class="table table-bordered table-striped table-hover" Pagination="@pagination">
+                                <TemplateColumn Title="SrNO" Sortable="false">
+                                    @count
+                                    @{
+                                        count++;
+                                    }
+                                </TemplateColumn>
+                                <PropertyColumn Property="@(p=>p.firstName)" Title="FirstName" Sortable="true"></PropertyColumn>
+                                <PropertyColumn Property="@(p=>p.lastName)" Title="LastName" Sortable="true"></PropertyColumn>
+
+                                <PropertyColumn Property="@(p=>p.amount)" Title="Mobile No" Sortable="true"></PropertyColumn>
+                                <PropertyColumn Property="@(p=>p.email)" Title="Email" Sortable="true"></PropertyColumn>
+                               
+
+                                <TemplateColumn Title="Active">
+                                    @if (context.isActive)
+                                    {
+                                        <span class="material-symbols-outlined text-success">
+                                            check_circle
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="material-symbols-outlined text-danger">
+                                            cancel
+                                        </span>
+                                    }
+                                </TemplateColumn>
+                                @if (permission.canEdit)
+                                {
+                                    <TemplateColumn>
+                                        <a class="btn" @onclick="@(()=>fnOpenSalary("Edit Salry Details",context))">
+                                            <span class="material-symbols-outlined">
+                                                edit
+                                            </span>
+                                        </a>
+                                    </TemplateColumn>
+                                }
+                                @if (permission.canDelete)
+                                {
+                                    <TemplateColumn>
+                                        <a class="btn" @onclick="@(()=>fndeletesalary("Delete Salary Details",context))">
+                                            <span class="material-symbols-outlined">
+                                                delete
+                                            </span>
+                                        </a>
+                                    </TemplateColumn>
+                                }
+                            </QuickGrid>
+                        </div>
+                        <Paginator State="pagination" />
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<UpsertSalary @ref="UpsertSalary" onDoneButtonClicked="fnSalarySearch"></UpsertSalary>
+
+
+
+
+

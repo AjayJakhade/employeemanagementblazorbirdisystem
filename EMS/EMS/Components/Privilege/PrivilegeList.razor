@@ -1,0 +1,135 @@
+﻿@page "/EMS/Privilege"
+@rendermode RenderMode.InteractiveServer
+
+@using EMS.Client.BuisnessLayer.Models
+@using Microsoft.AspNetCore.Components.QuickGrid;
+
+
+
+
+<div class="bg-lightblue p-3 mb-4">
+    <div class="row g-2">
+        <div class="col-md-9 col-6">
+            <h2> Privilege</h2>
+        </div>
+        @if (permission.canAdd)
+        {
+            <div class="col-md-3 col-6">
+                <button class="btn btn-sm btn-danger float-end" type="button" @onclick="@(()=>fnOpenPrivilege( "Add Privilege",new PrivilegeModel { isActive=true }))">
+                    <span class="material-icons fs-18px align-top">
+                        domain_add
+                    </span>
+                    Add Privilege
+                </button>
+            </div>
+        }
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 mb-2">
+            <div class="card card-body border-info p-2">
+                <EditForm Model="PrivilegeSearch" FormName="frmSearchPolicy" OnSubmit="fnPrivilegeSearch">
+                    <div class="row g-2">
+                        <div class="col-2">
+                            <div class="form-floating">
+                                <InputText @bind-Value="PrivilegeSearch.PrivilegeName" class="form-control form-control-sm" placeholder="PrivilegeGroup name" />
+                                <label>PrivilegeGroup name</label>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="form-check mt-1">
+                                <InputCheckbox @bind-Value="PrivilegeSearch.IsActive " class="form-check-input"></InputCheckbox>
+                                <label class="form-check-label">Active</label>
+                            </div>
+                        </div>
+                       
+                        <div class="col-auto d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <span class="material-symbols-outlined align-top">
+                                    search
+                                </span>
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+        <div class="col-12">
+            @if (permission.canGet)
+            {
+                <div class="card card-body border-primary p-2">
+                    @{
+                        int count = 1;
+                    }
+                    @if (objPrivilege == null)
+                    {
+                        <div class="alert alert-info"><em>@pageText</em></div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive grid">
+                            <QuickGrid Items="objPrivilege.AsQueryable()" Class="table table-bordered table-striped table-hover" Pagination="@pagination">
+                                <TemplateColumn Title="SrNO" Sortable="false">
+                                    @count
+                                    @{
+                                        count++;
+                                    }
+                                </TemplateColumn>
+                              
+                                <PropertyColumn Property="@(p=>p.privilegename)" Title="Privilege Name" Sortable="true"></PropertyColumn>
+                              
+                                <TemplateColumn Title="Active">
+                                    @if (context.isActive)
+                                    {
+                                        <span class="material-symbols-outlined text-success">
+                                            check_circle
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="material-symbols-outlined text-danger">
+                                            cancel
+                                        </span>
+                                    }
+                                </TemplateColumn>
+                                @if (permission.canEdit)
+                                {
+                                    <TemplateColumn>
+                                        <a class="btn" @onclick="@(()=>fnOpenPrivilege( "Edit Privilege Details",context))">
+                                            <span class="material-symbols-outlined">
+                                                edit
+                                            </span>
+                                        </a>
+                                    </TemplateColumn>
+                                }
+                                @if (permission.canDelete)
+                                {
+                                    <TemplateColumn>
+                                        <a class="btn" @onclick="@(()=>fndeleteprivilege( "Delete Privilege Details",context))">
+                                            <span class="material-symbols-outlined">
+                                                delete
+                                            </span>
+                                        </a>
+                                    </TemplateColumn>
+                                }
+                            </QuickGrid>
+                        </div>
+                        <Paginator State="pagination" />
+                    }
+                </div>
+            }
+        </div>
+
+    </div>
+
+</div>
+
+
+<UpsertPrivilege @ref="UpsertPrivilege" onDoneButtonClicked="fnPrivilegeSearch"></UpsertPrivilege>
+
+
+
+
+

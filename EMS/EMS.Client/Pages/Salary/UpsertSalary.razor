@@ -1,0 +1,94 @@
+﻿@using Microsoft.AspNetCore.Components.QuickGrid
+<div class="modal @ModalClass" id="exampleModal" tabindex="-1" style="display:@ModalDisplay; overflow-y: auto;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <span class="material-icons align-top">
+                        domain_add
+                    </span>
+                    @ModalTitle
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="(()=>fnCloseModal())"></button>
+            </div>
+
+
+
+            <div class="modal-body">
+                <div class="row g-2">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <EditForm Model="SalaryModel" FormName="frmUpsertEmployee" enctype="multipart/form-data" method="post" OnValidSubmit="fnSalarySave">
+                                <div class="card-body">
+                                    <DataAnnotationsValidator />
+
+
+                                    @if (FormMessage is not null && !string.IsNullOrWhiteSpace(FormMessage.message))
+                                    {
+                                        <div class="alert @FormMessage.cssClass">@FormMessage.message</div>
+                                    }
+
+
+                                    <div class="row">
+                                       
+
+                                    
+
+                                        <div class="col-6">
+                                            <div class="form-floating mb-2">
+                                                <InputSelect @bind-Value="SalaryModel!.empId" class="form-select" title="Employee is required ">
+                                                    <option value="0">(Choose Employee)</option>
+                                                    @if (objEMployee is not null)
+                                                    {
+                                                        @foreach (var emp in objEMployee)
+                                                        {
+                                                            <option value="@emp.empId"> @emp.firstName @emp.lastName  </option>
+                                                        }
+                                                    }
+                                                </InputSelect>
+                                                <label>Employee Name<span class="str-required">*</span></label>
+                                                <ValidationMessage For="@(()=>SalaryModel.empId)"></ValidationMessage>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-floating mb-2">
+                                                <InputNumber @bind-Value="SalaryModel!.amount" class="form-control" placeholder="Amount"></InputNumber>
+                                                <label>Amount<span class="str-required">*</span></label>
+                                                <ValidationMessage For="@(()=>SalaryModel.amount)"></ValidationMessage>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-md-12">
+                                        <div class="form-check">
+                                            <InputCheckbox @bind-Value="SalaryModel!.isActive" class="form-check-input"></InputCheckbox>
+                                            <label class="form-check-label">Active</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer">
+                                    <button class="btn btn-success" type="submit">Save</button>
+                                </div>
+
+
+                            </EditForm>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+
+
+

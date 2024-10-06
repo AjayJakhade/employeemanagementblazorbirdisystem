@@ -1,0 +1,57 @@
+﻿@page "/EMS/login"
+@layout Components.Layout.EmptyLayout
+
+
+<div class="row no-gutter">
+    <div class="col-md-6 d-none d-md-flex bg-image">
+        <div class="container">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-sm-12 mx-auto">
+                    <h2 class="text-center">Welcome to </h2>
+                    <h1 class="text-center">Employee Management System</h1>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 bg-lightblue">
+        <div class="login d-flex align-items-center py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 col-xl-7 mx-auto">
+                           <div class="text-center"><img src="./Images/EMSImage.png" alt="Alternate Text" width="160" /></div>
+
+                        <h3 class="text-center mb-3" style="font-weight:200">Login to continue</h3>
+                        <EditForm Model="LoginModel" OnValidSubmit="fnOnValidLoginSubmit" FormName="frmUserLogin">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                            @if (!string.IsNullOrWhiteSpace(objFormMessage.message))
+                            {
+                                <div class="alert @objFormMessage.cssClass">@objFormMessage.message</div>
+                            }
+
+                            <div class="form-floating mb-3">
+                                <InputText @bind-Value="LoginModel!.username" placeholder="User Name" class="form-control shadow-sm px-4 text-primary" />
+                                <label for="inputEmail">User Name</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <InputText @bind-Value="LoginModel!.password" type="password" placeholder="Password" class="form-control shadow-sm px-4 text-primary" />
+                                <label for="inputPassword">Password</label>
+                            </div>
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input id="customCheck1" type="checkbox" checked class="custom-control-input">
+                                <label for="customCheck1" class="custom-control-label">Remember password</label>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-orange text-uppercase mb-2 shadow-sm">Sign in</button>
+                            </div>
+                        </EditForm>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

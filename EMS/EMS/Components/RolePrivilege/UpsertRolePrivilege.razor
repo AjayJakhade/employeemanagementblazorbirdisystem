@@ -1,0 +1,130 @@
+﻿<div class="modal @ModalClass" id="exampleModal" tabindex="-1" style="display:@ModalDisplay; overflow-y: auto;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <span class="material-icons align-top">
+                        domain_add
+                    </span>
+                    @ModalTitle
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="(()=>fnCloseModal())"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-2">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <EditForm Model="RolePrivilegeModel" FormName="frmUpsertRolePrivilege" enctype="multipart/form-data" method="post" OnValidSubmit="fnSaveRolePrivilege">
+                                <div class="card-body">
+                                    <DataAnnotationsValidator />
+                                    @* <ValidationSummary /> *@
+                                    @if (frmMessage is not null && !string.IsNullOrWhiteSpace(frmMessage.message))
+                                    {
+                                        <div class="alert @frmMessage.cssClass">@frmMessage.message</div>
+                                    }
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-floating">
+                                                <InputSelect @bind-Value="RolePrivilegeModel!.roleid" class="form-select">
+                                                    <option>(Choose rolename)</option>
+                                                    @if (objRole is not null)
+                                                    {
+                                                        @foreach (var role in objRole)
+                                                        {
+                                                            <option value="@role.roleid"> @role.rolename</option>
+                                                        }
+                                                    }
+
+                                                </InputSelect>
+                                                <label>Role name<span class="str-required">*</span></label>
+                                                <ValidationMessage For="@(()=>RolePrivilegeModel.roleid)"></ValidationMessage>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6">
+                                            <div class="form-floating mb-2">
+                                                <div class="form-floating">
+                                                    <InputSelect @bind-Value="RolePrivilegeModel!.privilegeid" class="form-select">
+                                                        <option>(Choose privilegename)</option>
+                                                        @if (objprivilege is not null)
+                                                        {
+                                                            @foreach (var role in objprivilege)
+                                                            {
+                                                                <option value="@role.privilegeid"> @role.privilegename</option>
+                                                            }
+                                                        }
+                                                    </InputSelect>
+                                                    <label>Privilege name<span class="str-required">*</span></label>
+                                                    <ValidationMessage For="@(()=>RolePrivilegeModel.privilegeid)"></ValidationMessage>
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-4">
+                                            <div class="form-check">
+                                                <InputCheckbox @bind-Value="RolePrivilegeModel!.canadd" class="form-check-input"></InputCheckbox>
+                                                <label class="form-check-label">CanAdd</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <div class="form-check">
+                                                <InputCheckbox @bind-Value="RolePrivilegeModel!.canedit" class="form-check-input"></InputCheckbox>
+                                                <label class="form-check-label">CanEdit</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <div class="form-check">
+                                                <InputCheckbox @bind-Value="RolePrivilegeModel!.candelete" class="form-check-input"></InputCheckbox>
+                                                <label class="form-check-label">CanDelete</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-4">
+                                            <div class="form-check">
+                                                <InputCheckbox @bind-Value="RolePrivilegeModel!.canexport" class="form-check-input"></InputCheckbox>
+                                                <label class="form-check-label">CanExport</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <div class="form-check">
+                                                <InputCheckbox @bind-Value="RolePrivilegeModel!.canget" class="form-check-input"></InputCheckbox>
+                                                <label class="form-check-label">CanGet</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-4">
+                                            <div class="form-check">
+                                                <InputCheckbox @bind-Value="RolePrivilegeModel!.isActive" class="form-check-input"></InputCheckbox>
+                                                <label class="form-check-label">Active</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button class="btn btn-success" type="submit">Save</button>
+                                </div>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+
+
+

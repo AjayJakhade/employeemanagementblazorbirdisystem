@@ -1,0 +1,136 @@
+﻿@page "/EMS/Users"
+@rendermode RenderMode.InteractiveServer
+
+@using Microsoft.AspNetCore.Components.QuickGrid;
+
+<div class="bg-lightblue p-3 mb-4">
+    <div class="row g-2">
+        <div class="col-md-9 col-6">
+            <h2>Users</h2>
+        </div>
+        @if (permission.canAdd)
+        {
+            <div class="col-md-3 col-6">
+                <button class="btn btn-sm btn-danger float-end" type="button" @onclick="@(()=>fnCallModal(new Client.BuisnessLayer.Models.UsersModel { isActive=true }, "Add Users"))">
+                    <span class="material-icons fs-18px align-top">
+                        domain_add
+                    </span>
+                    Add Users
+                </button>
+            </div>
+        }
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 mb-2">
+            <div class="card card-body border-info p-2">
+                <EditForm Model="UserSearch" FormName="frmSearchPolicy" OnSubmit="fnSearchUsers">
+                    <div class="row g-2">
+                        <div class="col-auto">
+                            
+                            <InputText @bind-Value="UserSearch!.UserName" class="form-control form-control-sm" placeholder="User Name" />
+                           
+                        </div>
+
+
+
+                        <div class="col-auto">
+                           
+                            <InputText @bind-Value="UserSearch!.Email" class="form-control form-control-sm" placeholder="Mobile No" />
+                          
+                        </div>
+
+                      
+
+                        <div class="col-auto d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <span class="material-symbols-outlined align-top">
+                                    search
+                                </span>
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+        <div class="col-12">
+            @if (permission.canGet)
+            {
+                <div class="card card-body border-primary p-2">
+                    @{
+                        int count = 1;
+                    }
+                    @if (objUsers == null)
+                    {
+                        <div class="alert alert-info"><em>@pageText</em></div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive grid">
+                            <QuickGrid Items="objUsers.AsQueryable()" Class="table table-bordered table-striped table-hover" Pagination="@pagination">
+                                <TemplateColumn Title="SrNO" Sortable="false">
+                                    @count
+                                    @{
+                                        count++;
+                                    }
+                                </TemplateColumn>
+                                <PropertyColumn Property="@(p=>p.username)" Title="UserName" Sortable="true"></PropertyColumn>
+
+
+                                <PropertyColumn Property="@(p=>p.mobile)" Title="Mobile No" Sortable="true"></PropertyColumn>
+                                <PropertyColumn Property="@(p=>p.email)" Title="Email" Sortable="true"></PropertyColumn>
+
+
+                                <PropertyColumn Property="@(p=>p.roleid)" Title="Role" Sortable="true"></PropertyColumn>
+
+                                <TemplateColumn Title="Active">
+                                    @if (context.isActive)
+                                    {
+                                        <span class="material-symbols-outlined text-success">
+                                            check_circle
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="material-symbols-outlined text-danger">
+                                            cancel
+                                        </span>
+                                    }
+                                </TemplateColumn>
+                                @if (permission.canEdit)
+                                {
+                                    <TemplateColumn>
+                                        <a class="btn" @onclick="@(()=>fnCallModal(context, "Edit users Details"))">
+                                            <span class="material-symbols-outlined">
+                                                edit
+                                            </span>
+                                        </a>
+                                    </TemplateColumn>
+                                }
+                                @if (permission.canDelete)
+                                {
+                                    <TemplateColumn>
+                                        <a class="btn" @onclick="@(()=>fnDeleteModal(context, "Delete users Details"))">
+                                            <span class="material-symbols-outlined">
+                                                delete
+                                            </span>
+                                        </a>
+                                    </TemplateColumn>
+                                }
+                            </QuickGrid>
+                        </div>
+                        <Paginator State="pagination" />
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<UpsertUsers @ref="modelUpsertUsers" onDoneButtonClicked="fnSearchUsers"></UpsertUsers>
+
+
+
+
+

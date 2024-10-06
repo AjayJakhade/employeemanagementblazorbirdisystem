@@ -1,0 +1,62 @@
+﻿<div class="modal @ModalClass" id="exampleModal" tabindex="-1" style="display:@ModalDisplay; overflow-y: auto;">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <span class="material-icons align-top">
+                        domain_add
+                    </span>
+                    @ModalTitle
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="(()=>fnCloseModal())"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-2">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <EditForm Model="PrivilegeModel" FormName="frmUpsertPrivilege" method="post" OnValidSubmit="fnPrivilegeSave">
+                                <div class="card-body">
+                                    <DataAnnotationsValidator />
+                                  
+                                    @if (FormMessage is not null && !string.IsNullOrWhiteSpace(FormMessage.message))
+                                    {
+                                        <div class="alert @FormMessage.cssClass">@FormMessage.message</div>
+                                    }
+                                 
+                                    <div class="row g-2">
+                                        <div class="col-12">
+                                            <div class="form-floating mb-2">
+                                                <InputText @bind-Value="PrivilegeModel!.privilegename" class="form-control" placeholder="Privilege Name"></InputText>
+                                                <label>Privilege Name<span class="str-required">*</span></label>
+                                                <ValidationMessage For="@(() => PrivilegeModel.privilegename)"></ValidationMessage>
+
+                                            </div>
+                                        </div>
+                                     
+                                        <div class="col-6">
+                                            <div class="form-check">
+                                                <InputCheckbox @bind-Value="PrivilegeModel!.isActive" class="form-check-input"></InputCheckbox>
+                                                <label class="form-check-label">Active</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button class="btn btn-success" type="submit">Save</button>
+                                </div>
+                            </EditForm>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+
